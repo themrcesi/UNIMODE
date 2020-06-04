@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{15C4D158-F7B6-4D6F-BD48-DD30ADE7F281}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>CopiaProyectoElias</RootNamespace>
-    <AssemblyName>CopiaProyectoElias</AssemblyName>
+    <RootNamespace>Functionality</RootNamespace>
+    <AssemblyName>Functionality</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -73,7 +73,6 @@
   <ItemGroup>
     <Compile Include="Permutation.cs" />
     <Compile Include="Posets.cs" />
-    <Compile Include="Pragg.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

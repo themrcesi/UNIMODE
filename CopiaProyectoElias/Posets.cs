@@ -21,6 +21,8 @@ namespace extra
     
     public class Posets
     {
+
+        static void Main(string[] args) {}
         Random rg = new Random();
 
         //#####################################################POSETS###############################################################
