@@ -12,49 +12,53 @@ namespace StatisticsLP
         {
             var util = new Posets();
 
+            //In the next line you need to write the number of times you want to execute the non-deterministic algorithms (Minimals, MinimalRandom...)
             var maxIt = 50;
 
+            //The next three variables are needed to store all the lines to be written to a .csv file
             var lines = new List<String>();
             var times = new List<String>();
             var As = new List<String>();
-            var pathLines = @"C:\Datos\costesGeneral.csv";
-            var pathTimes = @"C:\Datos\timesGeneral.csv";
 
+            //Paths of the -cvs files to be written
+            var pathLines = @"YOUR_PATH.csv";
+            var pathTimes = @"YOUR_PATH.csv";
+            var pathA = @"YOUR_PATH.csv";
+
+            //Varaibles needed to measure the time
             TimeSpan start;
             TimeSpan stop;
+
+
+            //####################     IMPORTANT        ##############################
+            //For each algorithm you want to test, you need to create a variable to store its time and its costs. Ex: below.
+            //Times
             var timePM = 0.0;
             var timeLP = 0.0;
             var timeMin = 0.0;
-            var timeSelection = 0.0;
-            var timeInsertion = 0.0;
             var timeQuickSort = 0.0;
-            var timeBubble = 0.0;
-            var timeMergeSort = 0.0;
-            var timePMR = 0.0;
             var timePMSA = 0.0;
             var timePMSAB = 0.0;
-
+            //Costs
             var costesPM = new List<int>();
             var costesLP = new List<int>();
             var costesPMSA = new List<int>();
             var costesPMR = new List<int>();
-            var costesInsertion = new List<int>();
-            var costesSelection = new List<int>();
             var costesQuickSort = new List<int>();
-            var costesMergeSort = new List<int>();
-            var costesBubble = new List<int>();
             var costesPMSAB = new List<int>();
-            var minCoste = 0;
+
+            //Vector that stores all the posets of each iteration
             var vectorPosets = new List<List<bool>>();
 
 
-            //Objetos
-            for (int n = 3; n <= 12; n++)
+            //Objects
+            for (int n = 3; n <= 12; n++)   // Here you can change the size of the posets. Be aware that for MinCosteParallel, n=13 would take more than 12 hours.
             {
                 //Posets
-                for (int pp = 2; pp <= 50; pp++)
+                for (int pp = 2; pp <= 50; pp++)    // Here you can change the number of posets to be aggregated
                 {
-                    //Vector para los posets
+                    //###################################            COMPULSORY PART       ######################################
+                    // posets
                     vectorPosets = new List<List<bool>>();
                     for (int i = 0; i < pp; i++)
                     {
@@ -62,25 +66,37 @@ namespace StatisticsLP
                         poset = util.randomPermutation(poset, n);
                         vectorPosets.Add(poset);
                     }
-                    //Console.WriteLine("Posets creados");
+                    //Console.WriteLine("Posets creados");      // FLOW EXECUTION
 
                     //Vector A con la suma de todos los posets
-                    var A = util.sumaPosets(vectorPosets, n);
-                    //Console.WriteLine("A creados");
+                    var A = util.sumaPosets(vectorPosets, n);           // Here, matrix A is computed
+                    //Console.WriteLine("A creados");           // FLOW EXECUTION
 
-                    //Costes para el algoritmo PraggMinimals
+
+                    //###################################            CUSTOMIZABLE PART       ######################################
+                    /*
+                     * Now, for each algorithm you want to test you need to:
+                     *      1. Start measuring the time
+                     *      2. Do a for loop: inside the loop you need to execute the algorithm and add its cost to its costs vector
+                     *      3. Stop measuring the time
+                     *      4. Compute time
+                     *      
+                     *  Currently, you can test: Minimals, QuickSort, Minimals+SA low temperature, Minimals+SA high temperature, Linear programming, MinCost MT
+                     */
+
+                    // PraggMinimals
                     costesPM = new List<int>();
-                    start = new TimeSpan(DateTime.Now.Ticks);
+                    start = new TimeSpan(DateTime.Now.Ticks);       // Start measuring time
                     for (int it = 0; it < maxIt; it++)
                     {
-                        var aux = util.praggMinimals(ref A, n);
-                        var coste = util.coste(ref aux, A, n);
-                        costesPM.Add(coste);
+                        var aux = util.praggMinimals(ref A, n);     // Algorithm
+                        var coste = util.coste(ref aux, A, n);      // Cost
+                        costesPM.Add(coste);                        // Add cost     
                     }
-                    stop = new TimeSpan(DateTime.Now.Ticks);
-                    timePM = stop.Subtract(start).TotalMilliseconds;
+                    stop = new TimeSpan(DateTime.Now.Ticks);        // Stop measuring time
+                    timePM = stop.Subtract(start).TotalMilliseconds;// Compute time
 
-                    //Costes para el algoritmo quickSort
+                    // quickSort
                     costesQuickSort = new List<int>();
                     start = new TimeSpan(DateTime.Now.Ticks);
                     for (int it = 0; it < maxIt; it++)
@@ -93,7 +109,7 @@ namespace StatisticsLP
                     timeQuickSort = stop.Subtract(start).TotalMilliseconds;
                     //Console.WriteLine("Quicksort creados");
 
-                    //Costes para el algoritmo PraggMinimals + SA baja
+                    // PraggMinimals + SA baja
                     costesPMSA = new List<int>();
                     start = new TimeSpan(DateTime.Now.Ticks);
                     for (int it = 0; it < maxIt; it++)
@@ -105,7 +121,7 @@ namespace StatisticsLP
                     stop = new TimeSpan(DateTime.Now.Ticks);
                     timePMSA = stop.Subtract(start).TotalMilliseconds;
 
-                    //Costes para el algoritmo PraggMinimals + SA alta
+                    // PraggMinimals + SA alta
                     costesPMSAB = new List<int>();
                     start = new TimeSpan(DateTime.Now.Ticks);
                     for (int it = 0; it < maxIt; it++)
@@ -120,41 +136,40 @@ namespace StatisticsLP
                     //Costes LP
                     costesLP = new List<int>();
                     start = new TimeSpan(DateTime.Now.Ticks);
-                    for (var it = 0; it < maxIt; it++)
-                    {
-                        var aux = util.linearProgrammingB(ref A, n);
-                        costesLP.Add(aux.Item2);
-                    }
+                    var auxiliar = util.linearProgrammingB(ref A, n);
+                    for(var i=0; i<maxIt; i++) costesLP.Add(auxiliar.Item2);
                     stop = new TimeSpan(DateTime.Now.Ticks);
                     timeLP = stop.Subtract(start).TotalMilliseconds;
 
-                    //Coste mínimo para esta combinación
+                    //Minimum cost
                     start = new TimeSpan(DateTime.Now.Ticks);
-                    var auxiliar = util.minCosteParallel(A, n);
-                    //minCoste = util.coste(ref auxiliar, A, n);
+                    auxiliar = util.minCosteParallel(A, n);     // Multi-thread
+                    //minCoste = util.coste(ref auxiliar, A, n);    // Single-thread
                     stop = new TimeSpan(DateTime.Now.Ticks);
                     timeMin = stop.Subtract(start).TotalMilliseconds;
-                    //Console.WriteLine("minCoste creados");
-                    //var auxiliar = 0;
+                    //Console.WriteLine("minCoste creados");        // FLOW EXECUTION
 
 
-                    //Añadir la linea al StringBuilder
-                    añadirMatrizA(ref As, n, pp, ref A);
-                    añadirCombinación(ref lines, n, pp, ref costesPM, ref costesQuickSort, ref costesPMSA, ref costesPMSAB, ref costesLP, auxiliar.Item2);
-                    añadirTiempo(times, n, pp, timePM/maxIt, timeQuickSort/maxIt, timePMSA/maxIt, timePMSAB/maxIt, timeLP, timeMin);
+                    // ###########################################      COMPULSORY      ######################################################
+                    añadirMatrizA(ref As, n, pp, ref A);                                                                                                    // Add matrix A to the global vector
+                    añadirCombinación(ref lines, n, pp, ref costesPM, ref costesQuickSort, ref costesPMSA, ref costesPMSAB, ref costesLP, auxiliar.Item2);  // Add costs to the global vector of costs
+                    añadirTiempo(times, n, pp, timePM/maxIt, timeQuickSort/maxIt, timePMSA/maxIt, timePMSAB/maxIt, timeLP, timeMin);                        // Add times to the global vector of times
 
-                    Console.WriteLine("DONE--> N = {0} PP = {1}", n, pp);
+                    Console.WriteLine("DONE--> N = {0} PP = {1}", n, pp);   // FLOW EXECUTION
                 }
             }
 
-            //Archivo csv con los costes
+            // ##############################################   CREATE THE CSV FILES       ######################################################
+            //COSTS
             crearArchivoCsv(pathLines, lines);
-            //Archivo csv con los tiempos
+            //TIMES
             crearArchivoCsv(pathTimes, times);
-            //Archivo csv con las as
-            //util.crearArchivo();
+            //As
+            crearArchivoCsv(pathA, As);
             Console.ReadLine();
         }
+
+        // ###############################         AUXILIAR METHODS TO CREATE THE CSV FILES          ########################################3
 
         private static void añadirMatrizA(ref List<string> As, int n, int pp, ref List<int> a)
         {

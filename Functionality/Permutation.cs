@@ -11,6 +11,10 @@ namespace extra
    
     //Eric Ouellet, E. O. (2018, 3 julio). Permutations: Fast implementations and a new indexing algorithm allowing multithreading. 
     //Recuperado 30 septiembre, 2019, de https://www.codeproject.com/Articles/1250925/Permutations-Fast-implementations-and-a-new-indexi
+    
+    //It contains all the methods needed to compute the minimum cost in a parallel way
+
+
     public class Factorial
     {
         // ************************************************************************
