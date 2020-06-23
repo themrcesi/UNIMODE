@@ -6,4 +6,6 @@ All my stuff from my internships in UNIMODE Research Group at the University of 
 Analysis, development and study of several algorithms to aggregate partially ordered sets such as Simulated Annealing, Linear Programming...
 
 You can find my dissertation [here](https://themrcesi.github.io/files/tfg.pdf).
+
+And the slides of the presentation are available [here](https://themrcesi.github.io/files/tfg_slides.pdf).
  
